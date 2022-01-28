@@ -8,5 +8,8 @@ frequencies = list(
   # Raw frequencies
   'letter' = count_letters(words$split),
   # By letter position
-  'position' = sapply(1:5, function(i) count_letters(words$split[,i]))
+  'position' = sapply(1:n[2], function(i) count_letters(words$split[,i]))
 )
+
+# Clean up
+rm(count_letters)

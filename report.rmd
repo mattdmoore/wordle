@@ -1,0 +1,87 @@
+---
+title: "Recursive Wordle Solver"
+subtitle: "A reproducible R tutorial"
+author: "Matt Moore"
+date: "28/01/2022"
+output: pdf_document
+---
+
+# Introduction
+
+## Why use R to write reproducible articles?
+
+Writing an entire article in R has a significant learning curve, but comes with many payoffs later down the line. For example, during the review process, analysis pipelines may change several times. This requires reported values and figures to be updated everywhere they appear, potentially leading to errors and discrepancies between the published results and the actual analysis that took place
+
+An article written in R can be published along with all the source code used to generate it, so that anyone can see exactly how you reached your results and reproduce everything for themselves, using either your data or their own. Whilst closed-source, proprietary software like MATLAB can be powerful tools in specific use cases, they can present a significant roadblock to open science practices if used out of convenience rather than necessity.
+
+### `setwd()` vs. R Projects
+
+-   `setwd()` usually uses a hard-coded directory specific to the user's machine
+-   R projects are directory-agnostic and can store workspace images
+-   Can set up git with an R project for integrated version control
+
+### `contents.R`
+
+-   Main script is `contents.R`
+-   Used to call all other scripts in order
+-   Easy to see what's going on at a high level
+-   Clearing memory is optional, but helpful to avoid accidentally writing code that depends on variables that aren't produced inside the project
+
+### Loading libraries
+
+-   `config/libraries.R` checks for required packages and installs any missing ones
+
+-   It is useful to document which packages are used in which scripts, so that any redundant packages can be cleared out before making the code available to others
+
+-   Packages like `renv` can be used in situations where reproducibility is critical
+
+-   `renv` is similar to python's virtual environments `venv`, where dependencies are rolled up into a self-contained unit separate from the user's specific installation of R
+
+-   This means the code is less likely to break if run on different machines with different versions of R and R packages
+
+-   Note: `renv` uses static code analysis, so will not work with the custom package loading used in `libraries.R`; use `library()` instead
+
+### Reading data
+
+-   The `data/` folder contains any data files used in the project
+
+-   This could be raw data which is then transparently cleaned in R, or, in cases where this is not appropriate or feasible, data that has been cleaned in a separate program/script (e.g., Fieldtrip)
+
+-   `src/` is the source code folder where most of your scripts will live
+
+-   The first script called after `config/libraries.R` is usually `/src/read_data.R` to read all your raw data files into R
+
+-   Depending on how much reformatting and cleaning is required, you may include a separate script (or even folder of scripts) dedicated to this, or simply do it all in `read_data.R` if there is only a trivial amount
+
+# Example Project: Recursive Wordle Solver
+
+### Libraries
+
+```{r libraries, include=FALSE}
+source('config/libraries.R')
+
+```
+
+-    `tidyverse` is a collection of packages which greatly improve upon the basic functionality of R and are usually worth loading at the start of every new project
+
+-   `magrittr` is a `tidyverse` package, but is not loaded by default when `library('tidyverse')` is called; it contains the very useful `%<>%` assignment pipe operator
+
+### Word List
+
+```{r data}
+source('src/read_data.R')
+
+print(words$full)
+print(words$split)
+
+```
+
+-   We first load the raw Wordle word list from `word_list.txt`
+
+-   This list is then split into a character matrix for easier data handling
+
+    -   Don't hard-code values! If they release Wordle 2 next week using 6+ letters instead of 5, this entire project should run without changing a single variable
+
+### Letter Frequencies
+
+### Positional Frequencies
