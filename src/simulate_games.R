@@ -4,7 +4,7 @@ source('src/functions/n_guesses.R')
 
 # Starting word and N games to simulate
 word = 'irate'
-N = 300
+N = 100
 
 # Check if word is cached
 data_dir = 'data/cached_words'
