@@ -1,7 +1,7 @@
 score_word = function(word, freq)
 {
-  idx = sapply(letters, function(x) x %in% word)
-  return(freq[idx] / sum(freq))
+  idx = sapply(word, function(x) which(letters %in% x))
+  return(freq[unique(idx)] / sum(freq))
 }
 
 # Sum of word letter frequencies over total letters
@@ -18,3 +18,5 @@ words$full$position_score = apply(words$split, 1, function(word)
     score_word(word[i], frequencies$position[,i])
   }) %>% mean
 })
+
+words$full$total_score = words$full$letter_score * words$full$position_score
