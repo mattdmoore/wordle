@@ -128,7 +128,7 @@ rm(df)
 
 ### Total Letter Frequencies
 
-```{r letter, fig.height=3, echo=F}
+```{r letter, fig.height=3, fig.width=10, echo=F}
 source('plots/letter_frequencies.R')
 
 ```
@@ -147,3 +147,5 @@ source('plots/position_frequencies.R')
 -   Figure properties can be set in the chunk header e.g., `{r chunk-title, fig.height=3}`
 
 -   Chunk headers can also be used to create linked figure references, where clicking elsewhere in the text will jump to the relevant figure
+
+\#TODO: Bootstrapping and data caches, simulated guess distribution plots

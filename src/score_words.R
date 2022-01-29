@@ -20,3 +20,5 @@ words$full$position_score = apply(words$split, 1, function(word)
 })
 
 words$full$total_score = words$full$letter_score * words$full$position_score
+
+rm(score_word)
