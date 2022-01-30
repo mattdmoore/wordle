@@ -3,7 +3,7 @@ library('tidyverse')
 library('magrittr')
 
 # Starting word and N games to simulate
-word = 'xylyl'
+word = 'tares'
 N = 0
 
 simulate_games = function(word, N, word_list, cache_threshold=200)
@@ -66,7 +66,7 @@ simulate_games = function(word, N, word_list, cache_threshold=200)
   return(out)
 }
 
-simulate_games(word, N, words$split)
+assign(word, simulate_games(word, N, words$split))
 
 # Clean up
 rm(simulate_games, N, word, bootstrap_distribution, n_guesses, find_target)
