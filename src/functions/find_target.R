@@ -1,4 +1,4 @@
-find_target = function(word, target = NULL, word_list, print=T, i=1)
+find_target = function(word, target, word_list, print=T, i=1)
 {
   try_word = function(word, target)
   {
@@ -121,14 +121,13 @@ find_target = function(word, target = NULL, word_list, print=T, i=1)
     single = !is.matrix(word_list)
     if(single) 
     {
-      # Edge case: hit by exclusion on first recursion
-      if(i == 1 & print){cat(i, collapse_word(word), '\n'); i=i+1}
+      if(print) {cat(i, collapse_word(word), '\n'); i=i+1}
       
-      word = word_list
+      word = collapse_word(word_list)
       
       if(print)
       {
-        cat(i, collapse_word(word), '\n')
+        cat(i, word, '\n')
         cat('Done\n\n')
       }
     }
@@ -140,19 +139,19 @@ find_target = function(word, target = NULL, word_list, print=T, i=1)
   
   # Remove all words containing any black letters
   word_list %<>% remove_excluded(.,guess)
-  if(check_valid_word_list(word_list)) return()
+  if(check_valid_word_list(word_list)) return(collapse_word(word_list))
   
   # Remove all words missing any yellows
   word_list %<>% remove_unplaced(.,guess)
-  if(check_valid_word_list(word_list)) return()
+  if(check_valid_word_list(word_list)) return(collapse_word(word_list))
   
   # Remove all words containing any misplaced yellows
   word_list %<>% remove_misplaced(.,guess)
-  if(check_valid_word_list(word_list)) return()
+  if(check_valid_word_list(word_list)) return(collapse_word(word_list))
   
   # Remove all words containing non-matching greens
   word_list %<>% remove_placed(.,guess)
-  if(check_valid_word_list(word_list)) return()  
+  if(check_valid_word_list(word_list)) return(collapse_word(word_list))  
   
   # Choose next best word based on frequency
   freq = update_frequencies(word_list, guess)
@@ -160,7 +159,11 @@ find_target = function(word, target = NULL, word_list, print=T, i=1)
   {
     if(print) cat(i, collapse_word(word), '\n')
     word = choose_word(word_list,freq); i=i+1
-    return(c(paste0(word, collapse=''),
-             find_target(word, target, word_list, print, i)))
+    return(c(collapse_word(word),
+             find_target(word, 
+                         target, 
+                         word_list, 
+                         print, 
+                         i)))
   }
 }

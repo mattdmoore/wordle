@@ -1,40 +1,38 @@
-# Load required data from cache
-load('data/cached_words/later.RData')
-load('data/cached_words/xylyl.RData')
-load('data/bs_20000.RData')
+guess_distributions = function(words)
+{
+  # Load bootstrap distribution
+  source('src/functions/bootstrap_distribution.R')
+  df = data.frame(N = bootstrap_distribution(), 
+                  Word = '[Random]')
+  
+  # Load required data from cache
+  cache_dir = 'data/cached_words'
+  for(word in words)
+  {
+    file = paste0(word, '.RData')
+    path = paste(cache_dir, file, sep='/')
+    
+    load(path)
+    
+    df = rbind(df, data.frame(N = get(word)$x, Word = word))
+  }
+  
+  
+  p = ggplot(df, aes(x = N, fill = Word)) + 
+    geom_density(bw=1,
+                 alpha=.5) +
+    geom_vline(xintercept = 6,
+               lty = 3,
+               col='darkred') +
+    scale_x_continuous(breaks = 1:20) +
+    labs(title = 'Guesses to Correct Answer',
+         y = 'Density') +
+    theme_classic()
+  
+  plot(p)
+}
 
-p = ggplot() +
-  geom_vline(xintercept = 6,
-             col='darkred',
-             size=.25,
-             lty=5) + 
-  geom_density(aes(x=y, fill='[Random]'),
-               alpha=.5,
-               lty=3,
-               size=.2,
-               bw=1) + 
-  geom_density(aes(x=later$x, fill='Later'),
-               alpha=.3,
-               lty=3,
-               size=.2,
-               bw=1) +
-  geom_density(aes(x=xylyl$x, fill='Xylyl'),
-               alpha=.3,
-               lty=3,
-               size=.2,
-               bw=1) +
-  labs(x = 'N',
-       y = 'Density',
-       title = 'Guesses to Correct Answer') +
-  scale_x_continuous(breaks=1:20) + 
-  scale_fill_manual(
-    name = 'Word',
-    values = c('pink', 'blue', 'orange'), 
-    labels = c('[Random]','Later', 'Xylyl')) +
-  theme_classic() +
-  theme(legend.position = 'right')
-
-plot(p)
+guess_distributions(c('tales','xylyl'))
 
 # Clean up
-rm(p,y)
+rm(guess_distributions, bootstrap_distribution)

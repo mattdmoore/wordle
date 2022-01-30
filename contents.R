@@ -21,9 +21,6 @@ source('src/score_words.R')
 
 ##### Simulate games #####
 
-# Play 20k games with random starting words
-source('src/bootstrap_distribution.R')
-
 # Test specific words against bootstrapped distribution
 source('src/simulate_games.R')
 
