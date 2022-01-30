@@ -1,5 +1,5 @@
 find_next = function(word, word_list, freq)
-{
+{ 
   freq[sapply(letters, function(x) x %in% word)] = 0
   idx = apply(word_list, 1, function(word)
   {
