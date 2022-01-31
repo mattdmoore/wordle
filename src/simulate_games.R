@@ -3,10 +3,14 @@ library('tidyverse')
 library('magrittr')
 
 # Starting word and N games to simulate
-word = 'tares'
-N = 0
+word = 'later'
+N = 500
 
-simulate_games = function(word, N, word_list, cache_threshold=200)
+simulate_games = function(word, 
+                          N, 
+                          word_list, 
+                          solutions_list, 
+                          cache_threshold=200)
 {
   # Check if word is cached
   data_dir = 'data/cached_words'
@@ -36,7 +40,9 @@ simulate_games = function(word, N, word_list, cache_threshold=200)
   cat('Bootstrapping statistics for word:', paste0(word, collapse=''), '\n')
   for(i in 1:N)
   {
-    x[i] = n_guesses(word_list, strsplit(word,'') %>% unlist)
+    x[i] = n_guesses(word_list, 
+                     strsplit(word,'') %>% unlist,
+                     solutions_list=solutions_list)
     
     # Real-time progress monitoring
     cat(sprintf('\rMean: %.2f\tStDev: %.2f\tFail rate: %.02f%%\tN: %d/%d\t', 
@@ -66,7 +72,7 @@ simulate_games = function(word, N, word_list, cache_threshold=200)
   return(out)
 }
 
-assign(word, simulate_games(word, N, words$split))
+assign(word, simulate_games(word, N, words$split, solutions$split))
 
 # Clean up
 rm(simulate_games, N, word, bootstrap_distribution, n_guesses, find_target)
