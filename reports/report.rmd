@@ -70,7 +70,7 @@ It is common to see R scripts start with a call to `setwd()`, setting R's workin
 
 # Example Project: Recursive Wordle Solver
 
-## Initial Setup
+## Initial Setup {#initial-setup}
 
 ### Creating a new project
 
@@ -97,20 +97,20 @@ source('config/libraries.R')
 
 ### Word list
 
-```{r data, include=F}
+```{r data}
 source('src/read_data.R')
+
+print(head(words$split))
 
 ```
 
--   We first load the raw Wordle word list from `word_list.txt`
+-   We first load the raw Wordle word list from `data/word_list.txt`
 
 -   This list is then split into a character matrix for easier data handling
 
     -   Don't hard-code values! If they release Wordle 2 next week using 6+ letters instead of 5, this entire project should run without changing a single thing beyond the word list
 
 ## Letter Frequencies
-
--   Expensive computations can be cached to speed up runtime next time `knitr::knit()` is called to generate a .pdf from the .rmd file
 
 -   We can use `knitr::kable()` to neatly format R data structures into tables
 
@@ -128,14 +128,10 @@ rm(df)
 
 ```
 
-### Total Letter Frequencies
-
-```{r letter, fig.height=3, fig.width=10, echo=F}
+```{r letter, fig.height=3, fig.width=10, fig.cap = "\\label{fig:fig-1}", echo=F}
 source('plots/letter_frequencies.R')
 
 ```
-
-### Positional Letter Frequencies
 
 ```{r positional, fig.width=10, echo=F}
 source('plots/position_frequencies.R')
@@ -148,6 +144,37 @@ source('plots/position_frequencies.R')
 
 -   Figure properties can be set in the chunk header e.g., `{r chunk-title, fig.height=3}`
 
--   Chunk headers can also be used to create linked figure references, where clicking elsewhere in the text will jump to the relevant figure
+-   RMarkdown can create links to figure captions[\ref{fig:fig-1}] and [headings](#initial-setup)
 
-\#TODO: Bootstrapping and data caches, simulated guess distribution plots
+```{r bootstrapping, fig.width=10, echo=F}
+source('plots/guess_distributions.R')
+
+```
+
+### Recursive Solver Function
+
+-   Large functions, especially those used across multiple scripts, are kept in `src/functions`
+
+-   This is where our recursive solver `find_target()` lives
+
+    -   This function takes a word, target, and word list as inputs
+
+    -   It checks the word against the target, and excludes words from its word list based on hits/misses/etc.
+
+    -   Then, it chooses an optimal next word and **calls itself again**, this time using its chosen word and reduced word list as arguments
+
+    -   When the chosen word matches the target -- or there is only one word left in the word list -- the function exits, returning all guesses along the way
+
+### Simulating Games
+
+-   We can use `find_target()` to simulate thousands of games with random starting and target words
+
+-   This generates a bootstrapped distribution of the number of guesses required to reach the target
+
+-   Then we can simulate even more games with a specific starting word, running t-tests between the two samples to find out if that starting word is better than any word chosen at random
+
+-   Obviously, simulating several thousand games is computationally very expensive, but we have a few options to improve the situation
+
+    -   RStudio can run scripts as background jobs, so we can simulate multiple words at the same time without interrupting our workflow
+
+    -   Results can also be cached as .RData files using `save()` and `load()`, allowing very fast retrieval when needed
