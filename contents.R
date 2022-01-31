@@ -16,8 +16,11 @@ source('src/read_data.R')
 # Compute letter frequencies
 source('src/frequency_tables.R')
 
-# Score words by letter and position frequencies
-source('src/score_words.R')
+# Bar chart of letter frequencies
+source('plots/letter_frequencies.R')
+
+# Bar charts of letter frequencies by position in word
+source('plots/position_frequencies.R')
 
 ##### Simulate games #####
 
