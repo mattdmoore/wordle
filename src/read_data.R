@@ -10,5 +10,15 @@ words$split = sapply(words$full,
                      n = nchar(words$full[1,]), # get n from word length to avoid hard-coded values
                      simplify = F)[[1]]
 
+solutions = list(full = read.csv('data/solutions.txt', 
+                                 header = F,
+                                 col.names = 'word'))
+
+solutions$split = sapply(solutions$full,
+                         str_split_fixed,
+                         pattern = '',
+                         n = nchar(words$full[1,]), # get n from word length to avoid hard-coded values
+                         simplify = F)[[1]]
+
 # Store total number of words
 n = dim(words$split)
