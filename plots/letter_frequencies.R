@@ -5,7 +5,9 @@ df = data.frame(letter=letters,
 letter_frequencies = ggplot(df, aes(x=letter, y=n, fill=n)) + 
   geom_col() +
   scale_fill_viridis_b() +
-  labs(x = '', y = '') + 
+  labs(title = 'Total Letter Frequencies',
+       x = '', 
+       y = '') + 
   theme_classic() + 
   theme(legend.position = 'none')
 

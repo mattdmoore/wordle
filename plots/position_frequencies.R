@@ -23,7 +23,7 @@ reorder_within = function(x, by, within, fun = mean, sep = "___", ...)
 
 position_frequencies = ggplot(df, aes(x=reorder_within(letter, -n, position),y=n,fill=position,order=n)) + 
   geom_col() + 
-  labs(main = '',
+  labs(title = 'Letter Frequencies by Position in Word',
        x='',
        y='') +
   scale_x_reordered() +
