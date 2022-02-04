@@ -8,7 +8,7 @@ output: pdf_document
 
 # Introduction
 
-## Some initial reproducibility tips
+## Some R reproducibility tips
 
 ### `contents.R`
 
@@ -24,7 +24,7 @@ output: pdf_document
 
     -   In practice, this means tidying up unnecessary variables at the end of every script, and not calling functions and variables from other scripts
 
--   Initially clearing memory is optional, but helpful to avoid accidentally writing code that depends on variables that aren't produced inside the project itself, or are referenced before assignment in the code
+-   Initially clearing memory is optional, but helpful to avoid accidentally writing code that depends on variables that aren't produced inside the project itself, or are referenced before assignment
 
 ### `setwd()` vs. R Projects
 
@@ -32,7 +32,7 @@ It is common to see R scripts start with a call to `setwd()`, setting R's workin
 
 -   `setwd()` usually uses a hard-coded directory specific to the user's machine
 -   R projects are directory-agnostic and can store workspace images
--   Can set up git with an R project for integrated version control
+-   Can set up git alongside an R project for integrated version control
 
 ### Loading libraries
 
