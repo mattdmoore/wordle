@@ -3,8 +3,8 @@ library('tidyverse')
 library('magrittr')
 
 # Starting word and N games to simulate
-word = 'later'
-N = 500
+word = 'tares'
+N = 0
 
 simulate_games = function(word, 
                           N, 
