@@ -1,6 +1,7 @@
 library('magrittr')
 library('tidyverse')
 bootstrap_distribution = function(word_list=NULL, 
+                                  solutions_list=NULL,
                                   R=NULL) 
 {
   data_dir = 'data'
@@ -24,7 +25,7 @@ bootstrap_distribution = function(word_list=NULL,
     cat('Generating bootstrap distribution with', R, 'repetitions\n')
     for(i in 1:R)
     {
-      y[i] = n_guesses(words$split, solutions_list = solutions$split)
+      y[i] = n_guesses(word_list, solutions_list = solutions_list)
       
       # Real-time progress monitoring
       cat(sprintf('\rMean: %.2f\tStDev: %.2f\tFail rate: %.02f%%\tN: %d/%d', 
