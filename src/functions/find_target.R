@@ -105,12 +105,22 @@ find_target = function(word, target, word_list, print=T, i=1)
       idx = sapply(word, function(x) which(letters %in% x))
       return(freq[unique(idx)] / sum(freq))
     }
-    
-    idx = apply(word_list, 1, function(word)  
+
+    let = apply(word_list, 1, function(word)  
     {
       sum(score_word(word, freq$letter))
-    }) %>% which.max
+    })
     
+    pos = apply(word_list, 1, function(word)
+    {
+      sapply(1:n[2], function(i)
+      {
+        score_word(word[i], freq$position[,i])
+      }) %>% mean
+    })
+    
+    idx = ((let + pos) / 2) %>% which.max
+
     return(word_list[idx,])
   }
   
@@ -124,7 +134,6 @@ find_target = function(word, target, word_list, print=T, i=1)
       if(print) {cat(i, collapse_word(word), '\n'); i=i+1}
       
       word = collapse_word(word_list)
-      
       if(print)
       {
         cat(i, word, '\n')
@@ -159,11 +168,22 @@ find_target = function(word, target, word_list, print=T, i=1)
   {
     if(print) cat(i, collapse_word(word), '\n')
     word = choose_word(word_list,freq); i=i+1
-    return(c(collapse_word(word),
-             find_target(word, 
-                         target, 
-                         word_list, 
-                         print, 
-                         i)))
+    
+    # Return word if already correct
+    if(all(target == word)){
+      word %<>% collapse_word
+      if(print)
+      {
+        cat(i, word, '\n')
+        cat('Done\n\n')
+      }
+      return(word)
+      
+    # Otherwise, recurse
+    } else {
+      return(c(
+        collapse_word(word),
+        find_target(word, target, word_list, print, i)))
+    }
   }
 }
