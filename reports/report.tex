@@ -130,25 +130,6 @@
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-\hypertarget{why-use-r-to-write-reproducible-reports}{%
-\subsection{Why use R to write reproducible
-reports?}\label{why-use-r-to-write-reproducible-reports}}
-
-Writing an entire report in R has a significant learning curve, but
-comes with many payoffs later down the line. For example, during the
-review process, analysis pipelines may change several times. This
-requires reported values and figures to be updated everywhere they
-appear, potentially leading to errors and discrepancies between the
-published results and the actual analysis that took place.
-
-A report written in R can be published along with all the source code
-used to generate it, so that anyone can see exactly how you reached your
-results and reproduce everything for themselves, using either your data
-or their own. Whilst closed-source, proprietary software like MATLAB can
-be powerful tools in specific use-cases, they can present a significant
-roadblock to open science practices if used out of convenience rather
-than necessity.
-
 \hypertarget{some-initial-reproducibility-tips}{%
 \subsection{Some initial reproducibility
 tips}\label{some-initial-reproducibility-tips}}
@@ -355,9 +336,7 @@ Solver}\label{example-project-recursive-wordle-solver}}
 \subsection{Letter Frequencies}\label{letter-frequencies}}
 
 \begin{itemize}
-\item
-  Expensive computations can be cached to speed up runtime next time
-  \texttt{knitr::knit()} is called to generate a .pdf from the .rmd file
+\tightlist
 \item
   We can use \texttt{knitr::kable()} to neatly format R data structures
   into tables
@@ -441,7 +420,60 @@ z & 105 & 29 & 142 & 126 & 32 & 434 \\
 
 \includegraphics{report_files/figure-latex/bootstrapping-1.pdf}
 
-\#TODO: Bootstrapping and data caches, simulated guess distribution
-plots
+\hypertarget{recursive-solver-function}{%
+\subsubsection{Recursive Solver
+Function}\label{recursive-solver-function}}
+
+\begin{itemize}
+\item
+  Large functions, especially those used across multiple scripts, are
+  kept in \texttt{src/functions}
+\item
+  This is where our recursive solver \texttt{find\_target()} lives
+
+  \begin{itemize}
+  \item
+    This function takes a word, target, and word list as inputs
+  \item
+    It checks the word against the target, and excludes words from its
+    word list based on hits/misses/etc.
+  \item
+    Then, it chooses an optimal next word and \textbf{calls itself
+    again}, this time using its chosen word and reduced word list as
+    arguments
+  \item
+    When the chosen word matches the target -- or there is only one word
+    left in the word list -- the function exits, returning all guesses
+    along the way
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{simulating-games}{%
+\subsubsection{Simulating Games}\label{simulating-games}}
+
+\begin{itemize}
+\item
+  We can use \texttt{find\_target()} to simulate thousands of games with
+  random starting and target words
+\item
+  This generates a bootstrapped distribution of the number of guesses
+  required to reach the target
+\item
+  Then we can simulate even more games with a specific starting word,
+  running t-tests between the two samples to find out if that starting
+  word is better than any word chosen at random
+\item
+  Obviously, simulating several thousand games is computationally very
+  expensive, but we have a few options to improve the situation
+
+  \begin{itemize}
+  \item
+    RStudio can run scripts as background jobs, so we can simulate
+    multiple words at the same time without interrupting our workflow
+  \item
+    Results can also be cached as .RData files using \texttt{save()} and
+    \texttt{load()}, allowing very fast retrieval when needed
+  \end{itemize}
+\end{itemize}
 
 \end{document}

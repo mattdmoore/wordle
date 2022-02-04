@@ -8,12 +8,6 @@ output: pdf_document
 
 # Introduction
 
-## Why use R to write reproducible reports?
-
-Writing an entire report in R has a significant learning curve, but comes with many payoffs later down the line. For example, during the review process, analysis pipelines may change several times. This requires reported values and figures to be updated everywhere they appear, potentially leading to errors and discrepancies between the published results and the actual analysis that took place.
-
-A report written in R can be published along with all the source code used to generate it, so that anyone can see exactly how you reached your results and reproduce everything for themselves, using either your data or their own. Whilst closed-source, proprietary software like MATLAB can be powerful tools in specific use-cases, they can present a significant roadblock to open science practices if used out of convenience rather than necessity.
-
 ## Some initial reproducibility tips
 
 ### `contents.R`
