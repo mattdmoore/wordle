@@ -4,7 +4,7 @@ library('magrittr')
 
 # Starting word and N games to simulate
 word = 'tares'
-N = 0
+N = 50
 
 simulate_games = function(word, 
                           N, 
